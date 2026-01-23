@@ -18,6 +18,7 @@ export interface EventComponentProps {
   state: string;
   zip: number;
   date: Date;
+  submission: Function;
 }
 
 // Used for formating date.
@@ -53,7 +54,7 @@ export function EventComponent(props: EventComponentProps): JSX.Element {
       setattemptedSubmission(true); // displays a warning message.
       return;
     }
-    
+    props.submission(numberOfChildren);
   }
 
   // Date and Time formatting. 
@@ -66,8 +67,10 @@ export function EventComponent(props: EventComponentProps): JSX.Element {
 
   const iconSize = 25; // Width Size for Icons
 
+  const termsLink = "https://www.elevationchurch.org/acknowledgements-and-release"
+
   return (
-    <div className="w-128 p-4 m-4 bg-gray-200 rounded-lg">
+    <div className="w-100 p-4 m-4 bg-gray-200 rounded-lg">
       <h1 className="font-bold text-lg">Event Details</h1>
       <div className="flex flex-grid w-full">
         <div className="my-2">
@@ -109,7 +112,7 @@ export function EventComponent(props: EventComponentProps): JSX.Element {
       </div>
       <div className="flex my-2">
         <input type="checkbox" checked={termsIsChecked} onChange={handleTermsCheckChange} />
-        <p className="text-red-500 ml-2">{!termsIsChecked ? "*" : ""}</p><p className="text-xs">By checking this box, you agree to the terms outlined in this <a href="" className="underline">Acknowledgement & Release</a> form.</p>
+        <p className="text-red-500 ml-2">{!termsIsChecked ? "*" : ""}</p><p className="text-xs">By checking this box, you agree to the terms outlined in this <a href={termsLink} target="_blank" rel="noopener noreferrer" className="underline">Acknowledgement & Release</a> form.</p>
       </div>
       <p className="text-red-500">{!termsIsChecked && attemptedSubmission ? "Must Accept Terms as stated above to RSVP" : ""}</p>
       <button className="flex rounded-full justify-center w-[80%] my-2 mx-[10%] p-2 bg-gray-800 hover:bg-black" onClick={handleSubmission}> 
