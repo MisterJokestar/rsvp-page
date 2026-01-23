@@ -10,7 +10,7 @@ import pinIcon from "../public/map-pin-alt-svgrepo-com.svg";
 import mapIcon from "../public/map-svgrepo-com.svg";
 import checkIcon from "../public/check-circle-svgrepo-com.svg";
 
-// Interface for needed information for component.
+// Interface for needed information for component, and function to return data.
 export interface EventComponentProps {
   venue: string;
   address: string;
@@ -57,6 +57,11 @@ export function EventComponent(props: EventComponentProps): JSX.Element {
     props.submission(numberOfChildren);
   }
 
+  const handleCopyToClipboard = async () => {
+    let fullAddress = `${props.address}\n${props.city} ${props.state}, ${props.zip}`
+    await navigator.clipboard.writeText(fullAddress);
+  }
+
   // Date and Time formatting. 
   const month = monthNames[props.date.getMonth()]; // Want the word as a string, not number.
   const day = `${props.date.getDay()}`.padStart(2, '0');
@@ -68,6 +73,10 @@ export function EventComponent(props: EventComponentProps): JSX.Element {
   const iconSize = 25; // Width Size for Icons
 
   const termsLink = "https://www.elevationchurch.org/acknowledgements-and-release"
+
+  const cleanAddress = props.address.replaceAll(" ", "+");
+  const cleanCity = props.address.replaceAll(" ", "+");
+  const googleMapsLink =`https://www.google.com/maps/dir/?api=1&destination=${cleanAddress}+${cleanCity}+${props.state}`
 
   return (
     <div className="w-100 p-4 m-4 bg-gray-200 rounded-lg">
@@ -85,11 +94,13 @@ export function EventComponent(props: EventComponentProps): JSX.Element {
         </div>
         <div className="flex ml-auto">
           <div className="items-center mx-2">
-            <Image src={pinIcon} alt="Map-Pin Icon" width={iconSize} className="mx-[25%]"/>
+            <a href={googleMapsLink} target="_blank" rel="noopener noreferrer">
+              <Image src={pinIcon} alt="Map-Pin Icon" width={iconSize} className="mx-[25%] hover:cursor-pointer"/>
+            </a>
             <p className="text-xs">Directions</p>
           </div>
           <div className="items-center mx-2">
-            <Image src={copyIcon} alt="Copy Icon" width={iconSize}/>
+            <Image src={copyIcon} alt="Copy Icon" width={iconSize} onClick={handleCopyToClipboard} className='hover:cursor-pointer'/>
             <p className="text-xs">Copy</p>
           </div>
         </div>
@@ -105,17 +116,17 @@ export function EventComponent(props: EventComponentProps): JSX.Element {
       <div className="flex my-2">
         <p>Additional Children (0 - {maxAge}yrs)</p>
         <div className="flex rounded-full outline mr-2 ml-auto overflow-hidden">
-          <button className="px-2 hover:bg-gray-400" onClick={handleDecrementNumberOfChildren}>-</button>
+          <button className="px-2 hover:bg-gray-400 hover:cursor-pointer" onClick={handleDecrementNumberOfChildren}>-</button>
           <p className='outline px-2'>{numberOfChildren}</p>
-          <button className="px-2 hover:bg-gray-400" onClick={handleIncrementNumberOfChildren}>+</button>
+          <button className="px-2 hover:bg-gray-400 hover:cursor-pointer" onClick={handleIncrementNumberOfChildren}>+</button>
         </div>
       </div>
       <div className="flex my-2">
-        <input type="checkbox" checked={termsIsChecked} onChange={handleTermsCheckChange} />
+        <input type="checkbox" checked={termsIsChecked} onChange={handleTermsCheckChange} className='hover:cursor-pointer' />
         <p className="text-red-500 ml-2">{!termsIsChecked ? "*" : ""}</p><p className="text-xs">By checking this box, you agree to the terms outlined in this <a href={termsLink} target="_blank" rel="noopener noreferrer" className="underline">Acknowledgement & Release</a> form.</p>
       </div>
       <p className="text-red-500">{!termsIsChecked && attemptedSubmission ? "Must Accept Terms as stated above to RSVP" : ""}</p>
-      <button className="flex rounded-full justify-center w-[80%] my-2 mx-[10%] p-2 bg-gray-800 hover:bg-black" onClick={handleSubmission}> 
+      <button className="flex rounded-full justify-center w-[80%] my-2 mx-[10%] p-2 bg-gray-800 hover:bg-black hover:cursor-pointer" onClick={handleSubmission}> 
         <p className="text-white mx-2">RSVP</p>
         <Image src={checkIcon} alt="Copy Icon" width={iconSize} color="#ffffff"/>
       </button>
