@@ -85,7 +85,7 @@ export function EventComponent(props: EventComponentProps): JSX.Element {
   const googleMapsLink =`https://www.google.com/maps/dir/?api=1&destination=${cleanAddress}+${cleanCity}+${props.state}`
 
   return (
-    <div className="w-100 p-4 m-4 bg-gray-200 rounded-lg">
+    <div className="w-full md:w-100 p-4 md:m-4 bg-gray-200 md:rounded-lg">
       <h1 className="font-bold text-lg">Event Details</h1>
       <div className="flex flex-grid w-full">
         <div className="my-2">
@@ -102,12 +102,23 @@ export function EventComponent(props: EventComponentProps): JSX.Element {
           <div className="flex ml-auto">
             <div className="items-center mx-2">
               <a href={googleMapsLink} target="_blank" rel="noopener noreferrer">
-                <Image src={pinIcon} alt="Map-Pin Icon" width={iconSize} className="mx-[25%] hover:cursor-pointer"/>
+                <Image 
+                  src={pinIcon} 
+                  alt="Map-Pin Icon" 
+                  width={iconSize} 
+                  className="mx-[25%] hover:cursor-pointer"
+                />
               </a>
               <p className="text-xs">Directions</p>
             </div>
             <div className="items-center mx-2">
-              <Image src={copyIcon} alt="Copy Icon" width={iconSize} onClick={handleCopyToClipboard} className='hover:cursor-pointer'/>
+              <Image 
+                src={copyIcon} 
+                alt="Copy Icon" 
+                width={iconSize} 
+                onClick={handleCopyToClipboard} 
+                className='hover:cursor-pointer'
+              />
               <p className="text-xs">Copy</p>
             </div>
           </div>
@@ -127,17 +138,42 @@ export function EventComponent(props: EventComponentProps): JSX.Element {
       <div className="flex my-2">
         <p>Additional Children (0 - {maxAge}yrs)</p>
         <div className="flex rounded-full outline mr-2 ml-auto overflow-hidden">
-          <button className="px-2 hover:bg-gray-400 hover:cursor-pointer" onClick={handleDecrementNumberOfChildren}>-</button>
+          <button 
+            className="px-2 hover:bg-gray-400 hover:cursor-pointer"
+            onClick={handleDecrementNumberOfChildren}
+          >-</button>
           <p className='outline px-2'>{numberOfChildren}</p>
-          <button className="px-2 hover:bg-gray-400 hover:cursor-pointer" onClick={handleIncrementNumberOfChildren}>+</button>
+          <button 
+            className="px-2 hover:bg-gray-400 hover:cursor-pointer" 
+            onClick={handleIncrementNumberOfChildren}
+          >+</button>
         </div>
       </div>
       <div className="flex my-2">
-        <input type="checkbox" checked={termsIsChecked} onChange={handleTermsCheckChange} className='hover:cursor-pointer' />
-        <p className="text-red-500 ml-2">{!termsIsChecked ? "*" : ""}</p><p className="text-xs">By checking this box, you agree to the terms outlined in this <a href={termsLink} target="_blank" rel="noopener noreferrer" className="underline">Acknowledgement & Release</a> form.</p>
+        <input 
+          type="checkbox"
+          checked={termsIsChecked}
+          onChange={handleTermsCheckChange}
+          className='hover:cursor-pointer'
+        />
+        <p className="text-red-500 ml-2">
+          {!termsIsChecked ? "*" : ""}
+        </p>
+        <p className="text-xs">
+          By checking this box, you agree to the terms outlined in this&nbsp; 
+          <a href={termsLink} target="_blank" rel="noopener noreferrer" className="underline">
+            Acknowledgement & Release
+          </a> 
+          &nbsp;form.
+        </p>
       </div>
-      <p className="text-red-500">{!termsIsChecked && attemptedSubmission ? "Must Accept Terms as stated above to RSVP" : ""}</p>
-      <button className="flex rounded-full justify-center w-[80%] my-2 mx-[10%] p-2 bg-gray-800 hover:bg-black hover:cursor-pointer" onClick={handleSubmission}> 
+      <p className="text-red-500">
+        {!termsIsChecked && attemptedSubmission ? "Must Accept Terms as stated above to RSVP" : ""}
+      </p>
+      <button 
+        className="flex rounded-full justify-center w-[80%] my-2 mx-[10%] p-2 bg-gray-800 hover:bg-black hover:cursor-pointer" 
+        onClick={handleSubmission}
+      > 
         <p className="text-white mx-2">RSVP</p>
         <Image src={checkIcon} alt="Copy Icon" width={iconSize} color="#ffffff"/>
       </button>

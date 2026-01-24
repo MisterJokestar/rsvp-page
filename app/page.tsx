@@ -31,6 +31,11 @@ export default function Home() {
     localStorage.setItem(localKey, JSON.stringify(newTotal));
   }
 
+  const resetReservations = () => {
+    setTotalReservations([]);
+    localStorage.removeItem(localKey);
+  }
+
   const information: EventComponentProps = {
     venue: "Elevation Church Ballantyne",
     address: "11701 Elevation Pt Dr",
@@ -42,8 +47,14 @@ export default function Home() {
   }
 
   return (
-    <div className="flex w-full">
-      <div>
+    <div className="md:flex">
+      <div className="m-4">
+        <button 
+          onClick={resetReservations} 
+          className="rounded-full outline p-2 bg-gray-200 hover:bg-gray-400 hover:cursor-pointer"
+        >
+          Reset RSVPS
+        </button>
         <h1>Total RSVPs: {totalReservations.length}</h1>
         <ul>
           {totalReservations.map((rsvp) => (
@@ -51,7 +62,7 @@ export default function Home() {
           ))}
         </ul>
       </div>
-      <div className="ml-auto">
+      <div className="absolute bottom-0 md:relative md:ml-auto">
         <EventComponent {...information} />
       </div>
     </div>
