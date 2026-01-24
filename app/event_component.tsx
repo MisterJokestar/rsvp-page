@@ -48,18 +48,24 @@ export function EventComponent(props: EventComponentProps): JSX.Element {
   const maxAge = 12; // Max age for children
 
   // Form Submission Logic
-  const [attemptedSubmission, setattemptedSubmission] = useState<boolean>(false);
+  const [attemptedSubmission, setAttemptedSubmission] = useState<boolean>(false);
   const handleSubmission = () => {
     if (!termsIsChecked) {
-      setattemptedSubmission(true); // displays a warning message.
+      setAttemptedSubmission(true); // displays a warning message.
       return;
     }
     props.submission(numberOfChildren);
+    setAttemptedSubmission(false);
   }
 
+  // Copy logic for address.
+  const [coppiedToClipboard, setCoppiedToClipboard] = useState<boolean>(false);
   const handleCopyToClipboard = async () => {
     let fullAddress = `${props.address}\n${props.city} ${props.state}, ${props.zip}`
     await navigator.clipboard.writeText(fullAddress);
+    setCoppiedToClipboard(true);
+    // reset state, so message is temporary.
+    setTimeout(setCoppiedToClipboard, 3000, false);
   }
 
   // Date and Time formatting. 
@@ -92,16 +98,21 @@ export function EventComponent(props: EventComponentProps): JSX.Element {
             <p>{props.city}, {props.state} {props.zip}</p>
           </div>
         </div>
-        <div className="flex ml-auto">
-          <div className="items-center mx-2">
-            <a href={googleMapsLink} target="_blank" rel="noopener noreferrer">
-              <Image src={pinIcon} alt="Map-Pin Icon" width={iconSize} className="mx-[25%] hover:cursor-pointer"/>
-            </a>
-            <p className="text-xs">Directions</p>
+        <div>
+          <div className="flex ml-auto">
+            <div className="items-center mx-2">
+              <a href={googleMapsLink} target="_blank" rel="noopener noreferrer">
+                <Image src={pinIcon} alt="Map-Pin Icon" width={iconSize} className="mx-[25%] hover:cursor-pointer"/>
+              </a>
+              <p className="text-xs">Directions</p>
+            </div>
+            <div className="items-center mx-2">
+              <Image src={copyIcon} alt="Copy Icon" width={iconSize} onClick={handleCopyToClipboard} className='hover:cursor-pointer'/>
+              <p className="text-xs">Copy</p>
+            </div>
           </div>
-          <div className="items-center mx-2">
-            <Image src={copyIcon} alt="Copy Icon" width={iconSize} onClick={handleCopyToClipboard} className='hover:cursor-pointer'/>
-            <p className="text-xs">Copy</p>
+          <div className="text-xs w-full">
+            <p className=''>{coppiedToClipboard ? "Coppied to clipboard!" : ""}</p>
           </div>
         </div>
       </div>
